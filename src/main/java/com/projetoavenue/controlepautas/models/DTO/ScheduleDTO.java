@@ -1,4 +1,5 @@
-package com.projetoavenue.controlepautas.models;
+package com.projetoavenue.controlepautas.models.DTO;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +15,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Associado")
-public class Associado {
-    @Id
-    @GeneratedValue
-    private long id;
-    private String nomeAssociado;
+public class ScheduleDTO {
+    private String name;
+    private LocalDateTime createdDate;
+    private String subject;
+    private String cpf;
 }

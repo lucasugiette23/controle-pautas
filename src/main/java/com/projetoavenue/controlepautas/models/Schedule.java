@@ -1,7 +1,7 @@
 package com.projetoavenue.controlepautas.models;
 
 
-import com.projetoavenue.controlepautas.models.enums.PautaType;
+import com.projetoavenue.controlepautas.models.enums.ScheduleType;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -14,11 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "Pauta")
-public class Pauta {
+public class Schedule {
     @Id
     @GeneratedValue
     private Long id;
-    private PautaType voto;
-    private long id_associado;
-    private LocalDateTime dataVoto;
+    private String name;
+    private LocalDateTime createdDate;
+    private String subject;
+    private String cpf;
+    private Boolean openedSession;
 }
