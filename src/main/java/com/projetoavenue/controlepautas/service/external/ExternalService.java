@@ -19,7 +19,7 @@ public class ExternalService {
     private UserInfoConfig userInfoConfig;
     public ResponseEntity<ExternalResponse> consumerApiCheckCPF(String cpf){
         URIBuilder builder = new URIBuilder();
-        builder.setScheme("https").setHost("user-info.herokuapp.com/users").setPath(cpf);
+        builder.setScheme(userInfoConfig.getSchema()).setHost(userInfoConfig.getUrl()).setPath(cpf);
         log.info("Iniciando requisição a API da user-info para consulta do CPF:", cpf);
         URI uri = URI.create(builder.toString());
         return new RestTemplate().getForEntity(uri, ExternalResponse.class);
