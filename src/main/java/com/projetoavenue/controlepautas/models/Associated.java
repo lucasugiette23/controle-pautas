@@ -20,6 +20,6 @@ public class Associated {
     @GeneratedValue
     private long id;
     private String name;
-    private String doc;
+    private String cpf;
     private String birthdate;
 }

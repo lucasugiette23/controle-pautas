@@ -13,6 +13,7 @@ import com.projetoavenue.controlepautas.models.enums.UserInfoType;
 import com.projetoavenue.controlepautas.repository.AssociatedVoteScheduleRepository;
 import com.projetoavenue.controlepautas.repository.PautaRepository;
 import com.projetoavenue.controlepautas.service.external.ExternalService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class PautaService {
     @Autowired
@@ -35,6 +37,7 @@ public class PautaService {
 
     public ResponseEntity<?> newSchedule(ScheduleDTO scheduleDTO){
         var pauta = scheduleBuilder.SchedulefromDTOToEntity(scheduleDTO);
+        log.info("Cadastrando nova Pauta ", scheduleDTO.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.pautaRepository.save(pauta));
     }
 
@@ -54,10 +57,10 @@ public class PautaService {
                         }
 
                     }else{
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("O tempo de votaçãojá encerrou");
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("O tempo de votação já foi encerrado.");
                     }
                 }else{
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pauta não encontradana nossa base");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pauta não encontrada na nossa base");
                 }
 
             }else{
@@ -71,7 +74,7 @@ public class PautaService {
     public void openSessionInShcedule(OpenSessionInSchedule openSessionInSchedule){
         ResponseEntity.status(HttpStatus.CREATED).body(this.pautaRepository.save(Schedule.builder().
                 id(openSessionInSchedule.getIdSchedule()).openedSession(true).build()));
-        System.out.println(LocalDateTime.now());
+        log.info("Iniciando sessão da Pauta: ", openSessionInSchedule.getIdSchedule());
         try{
             new Thread(()-> {
                 try{
@@ -87,13 +90,14 @@ public class PautaService {
 
     public void closeSession(OpenSessionInSchedule openSessionInSchedule) throws InterruptedException {
         new Thread().sleep(openSessionInSchedule.getTimeWithSessionStayOpen() * 1000);
-        System.out.println(LocalDateTime.now());
+        log.info("Encerrando sessão da Pauta: ", openSessionInSchedule.getIdSchedule());
         this.pautaRepository.save(Schedule.builder().id(openSessionInSchedule.getIdSchedule()).openedSession(false).build());
     }
 
     public ResultSchedule resultSchedule(long scheduleId){
         var schedules = this.associatedVoteScheduleRepository.findByScheduleId(scheduleId);
         var resultSchedule = new ResultSchedule();
+        log.info("Imprimindo resultado da pauta ", scheduleId);
         schedules.get().stream().forEach(s->{
             if (s.getVote().equals(ScheduleType.SIM)) {
                 resultSchedule.setVotosSim(resultSchedule.getVotosSim() + 1);
