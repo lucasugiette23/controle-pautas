@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Service
-public class PautaService {
+public class ScheduleService {
     @Autowired
     private PautaRepository pautaRepository;
     @Autowired
@@ -35,7 +35,7 @@ public class PautaService {
     @Autowired
     private AssociatedVoteScheduleRepository associatedVoteScheduleRepository;
 
-    public ResponseEntity<?> newSchedule(ScheduleDTO scheduleDTO){
+    public ResponseEntity<Schedule> newSchedule(ScheduleDTO scheduleDTO){
         var pauta = scheduleBuilder.SchedulefromDTOToEntity(scheduleDTO);
         log.info("Cadastrando nova Pauta ", scheduleDTO.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.pautaRepository.save(pauta));

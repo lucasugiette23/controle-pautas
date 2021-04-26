@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class AssociadoService {
+public class AssociatedService {
     @Autowired
     private AssociadoRepository associadoRepository;
 
-    public ResponseEntity<?> registerAssociate(Associated associated){
+    public ResponseEntity<Associated> registerAssociate(Associated associated){
         log.info("Cadastrando novo associado:", associated.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.associadoRepository.save(associated));
     }
